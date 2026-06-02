@@ -7,9 +7,21 @@ namespace TodoApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen(o =>
+            {
+                o.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo { Title = "astroToDo.api", Version = "v1" });
+            });
+
             var app = builder.Build();
 
-            app.MapGet("/", () => $"Hello world!");
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(o => { o.SwaggerEndpoint("/swagger/v1/swagger.json", "astroToDo api v1"); });
+            }
+
+            app.Map("/hello", () => $"Just testing...");
 
             app.Run();
         }
