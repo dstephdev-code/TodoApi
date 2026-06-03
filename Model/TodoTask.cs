@@ -7,12 +7,12 @@ namespace TodoApi.Model
         public Guid Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime DueDate { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset DueDate { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
         public TaskStatusEnum Status { get; set; }
         public TaskPriorityEnum Priority { get; set; }
-        public List<TaskAssignment> TaskAssignment { get; set; } = [];
+        public List<TaskAssignment> TaskAssignments { get; set; } = [];
 
     }
 }
