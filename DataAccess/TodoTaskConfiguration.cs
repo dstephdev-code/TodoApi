@@ -4,7 +4,7 @@ using TodoApi.Model;
 
 namespace TodoApi.DataAccess
 {
-    public class TodoDbConfiguration : IEntityTypeConfiguration<TodoTask>
+    public class TodoTaskConfiguration : IEntityTypeConfiguration<TodoTask>
     {
         public void Configure(EntityTypeBuilder<TodoTask> builder)
         {
@@ -31,8 +31,7 @@ namespace TodoApi.DataAccess
                 .IsRequired();
 
             builder.Property(p => p.UpdatedAt)
-                .HasColumnType("datetimeoffset(3)")
-                .IsRequired();
+                .HasColumnType("datetimeoffset(3)");
 
             builder.Property(p => p.Status)
                 .HasConversion<string>()
