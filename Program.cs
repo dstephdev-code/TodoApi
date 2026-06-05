@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TodoApi.DataAccess;
+using TodoApi.DataAccess.Repositories;
 
 namespace TodoApi
 {
@@ -17,6 +18,7 @@ namespace TodoApi
                 o.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo { Title = "astroToDo.api", Version = "v1" });
             });
             builder.Services.AddDbContext<TodoDbContext>(o => o.UseSqlServer(connectionString));
+            builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
 
             var app = builder.Build();
 
@@ -26,7 +28,7 @@ namespace TodoApi
                 app.UseSwaggerUI(o => { o.SwaggerEndpoint("/swagger/v1/swagger.json", "astroToDo api v1"); });
             }
 
-            app.Map("/hello", () => $"Just testing...");
+            app.MapControllers();
 
             app.Run();
         }
