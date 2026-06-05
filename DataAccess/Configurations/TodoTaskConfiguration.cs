@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TodoApi.Model;
 
-namespace TodoApi.DataAccess
+namespace TodoApi.DataAccess.Configurations
 {
-    public class TodoTaskConfiguration : IEntityTypeConfiguration<TodoTask>
+    public partial class TodoTaskConfiguration : IEntityTypeConfiguration<TodoTask>
     {
         public void Configure(EntityTypeBuilder<TodoTask> builder)
         {
