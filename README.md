@@ -24,6 +24,6 @@ To make project as much scalable but not overengineered I divided project into 4
 
 ---
 *> 05.06.2026* >>> Implemented Create, GetAll and GetById methods.<br>
-*> 06.06.2025* >>> Implemented Remove method.
+*> 06.06.2025* >>> Implemented Remove method and extracted logic to separate services module.
 
 *License MIT &copy;2026*
