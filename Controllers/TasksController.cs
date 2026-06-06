@@ -49,5 +49,19 @@ namespace TodoApi.Controllers
             await _todoTaskRepository.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<TodoTask>> RemoveById(Guid id)
+        {
+            var task = await _todoTaskRepository.GetByIdAsync(id);
+
+            // I'm not deleting it right away because we need first to check if we have connected users.
+            // For now there is no check for it, I simply checking null, but its temporary
+            if (task == null) return NotFound();
+
+            _todoTaskRepository.Remove(task);
+            await _todoTaskRepository.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }

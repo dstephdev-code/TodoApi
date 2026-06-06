@@ -7,9 +7,9 @@ namespace TodoApi.DataAccess.Repositories
     {
         private readonly TodoDbContext _dbContext = context;
 
-        public async Task<TodoTask> GetByIdAsync(Guid id)
+        public async Task<TodoTask?> GetByIdAsync(Guid id)
         {
-            return await _dbContext.Tasks.FindAsync(id) ?? throw new NullReferenceException($"No task found with {id} id.");
+            return await _dbContext.Tasks.FindAsync(id);
         }
 
         public async Task<List<TodoTask>> GetAllAsync()
@@ -22,9 +22,9 @@ namespace TodoApi.DataAccess.Repositories
             await _dbContext.Tasks.AddAsync(todoTask);
         }
 
-        public Task RemoveByIdAsync(Guid id)
+        public void Remove(TodoTask task)
         {
-            throw new NotImplementedException();
+            _dbContext.Tasks.Remove(task);
         }
 
         public async Task SaveChangesAsync()
