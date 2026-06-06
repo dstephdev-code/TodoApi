@@ -23,6 +23,7 @@ Id is generated on .NET side, type of Guid. Enums are stored on DB side as strin
 To make project as much scalable but not overengineered I divided project into 4 main parts + frontend in future. Models storing basig entities, data access with repository pattern allows service module to work with storage of models independently of way of storing data. And controllers which just make basic rediriction to services logic.
 
 ---
-Implemented Create, GetAll and GetById methods. *# 05.06.2026*
+*> 05.06.2026* >>> Implemented Create, GetAll and GetById methods.<br>
+*> 06.06.2025* >>> Implemented Remove method.
 
 *License MIT &copy;2026*

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.DataAccess;
 using TodoApi.DataAccess.Repositories;
+using TodoApi.Services;
 
 namespace TodoApi
 {
@@ -19,6 +20,7 @@ namespace TodoApi
             });
             builder.Services.AddDbContext<TodoDbContext>(o => o.UseSqlServer(connectionString));
             builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
+            builder.Services.AddScoped<ITodoTasksService, TodoTasksService>();
 
             var app = builder.Build();
 
