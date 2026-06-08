@@ -11,7 +11,7 @@ namespace TodoApi.Controllers
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
-        public async Task<ActionResult<TodoTask>> GetAll() => Ok(await _todoTasksService.GetAllAsync()); // Maybe show NoContent() when list is empty?
+        public async Task<ActionResult<List<TodoTask>>> GetAll() => Ok(await _todoTasksService.GetAllAsync()); // Maybe show NoContent() when list is empty?
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoTask>> GetById(Guid id)
@@ -34,10 +34,17 @@ namespace TodoApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TodoTask>> RemoveById(Guid id)
+        public async Task<IActionResult> RemoveById(Guid id)
         {
             await _todoTasksService.RemoveById(id);
             // Check on exceptions when I'll add middleware
+            return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchById(Guid id, [FromBody] TodoTaskUpdateDTO todoTaskUpdateDTO)
+        {
+            await _todoTasksService.UpdatePartialAsync(id, todoTaskUpdateDTO);
             return NoContent();
         }
     }

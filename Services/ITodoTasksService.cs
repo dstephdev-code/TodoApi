@@ -8,5 +8,6 @@ namespace TodoApi.Services
         Task<TodoTask> GetByIdAsync(Guid id);
         Task<TodoTask> CreateAsync(TodoTaskDTO todoTaskDTO);
         Task RemoveById(Guid id);
+        Task UpdatePartialAsync(Guid id, TodoTaskUpdateDTO todoTaskUpdateDTO);
     }
 }

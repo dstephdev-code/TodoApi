@@ -24,6 +24,7 @@ To make project as much scalable but not overengineered I divided project into 4
 
 ---
 *> 05.06.2026* >>> Implemented Create, GetAll and GetById methods.<br>
-*> 06.06.2025* >>> Implemented Remove method and extracted logic to separate services module.
+*> 06.06.2025* >>> Implemented Remove method and extracted logic to separate services module.<br>
+*> 08.06.2025* >>> Implemented Patch method. Now we have all CRUD-ops but without validation and logic.
 
 *License MIT &copy;2026*

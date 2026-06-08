@@ -47,5 +47,25 @@ namespace TodoApi.Services
             _todoTaskRepository.Remove(todoTask);
             await _todoTaskRepository.SaveChangesAsync();
         }
+
+        public async Task UpdatePartialAsync(Guid id, TodoTaskUpdateDTO todoTaskUpdateDTO)
+        {
+            var todoTask = await _todoTaskRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException($"ToDo task by id {id} is not found!");
+
+            //Validation of DTO here!
+
+            //----------------------
+
+            todoTask.Name = todoTaskUpdateDTO.Name ?? todoTask.Name;
+            todoTask.Description = todoTaskUpdateDTO.Description ?? todoTask.Description;
+            todoTask.DueDate = todoTaskUpdateDTO.DueDate ?? todoTask.DueDate;
+            todoTask.Status = todoTaskUpdateDTO.Status != null ? todoTaskUpdateDTO.Status.Value : todoTask.Status;
+            todoTask.Priority = todoTaskUpdateDTO.Priority != null ? todoTaskUpdateDTO.Priority.Value : todoTask.Priority;
+
+            todoTask.UpdatedAt = DateTimeOffset.UtcNow;
+
+            await _todoTaskRepository.SaveChangesAsync();
+
+        }
     }
 }
