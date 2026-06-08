@@ -1,7 +1,7 @@
-
 using Microsoft.EntityFrameworkCore;
 using TodoApi.DataAccess;
 using TodoApi.DataAccess.Repositories;
+using TodoApi.Middleware;
 using TodoApi.Services;
 
 namespace TodoApi
@@ -30,6 +30,7 @@ namespace TodoApi
                 app.UseSwaggerUI(o => { o.SwaggerEndpoint("/swagger/v1/swagger.json", "astroToDo api v1"); });
             }
 
+            app.UseMiddleware<RequestLoggingMiddleware>();
             app.MapControllers();
 
             app.Run();
