@@ -11,40 +11,34 @@ namespace TodoApi.Controllers
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
-        public async Task<ActionResult<List<TodoTask>>> GetAll() => Ok(await _todoTasksService.GetAllAsync()); // Maybe show NoContent() when list is empty?
+        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll(CancellationToken cancellationToken) 
+            => Ok(await _todoTasksService.GetAllAsync(cancellationToken)); // Maybe show NoContent() when list is empty?
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoTask>> GetById(Guid id)
+        public async Task<ActionResult<TodoTaskDTO>> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var task = await _todoTasksService.GetByIdAsync(id);
-            // There will be middleware to catch problems, so no try {} catch {} for now.
-            if (task == null) return NotFound();
-
+            var task = await _todoTasksService.GetByIdAsync(id, cancellationToken);
             return Ok(task);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TodoTask>> Create([FromBody] TodoTaskDTO taskDTO)
+        public async Task<ActionResult<TodoTaskDTO>> Create([FromBody] TodoTaskCreateDTO taskDTO, CancellationToken cancellationToken)
         {
-            var todoTask = await _todoTasksService.CreateAsync(taskDTO);
-
-            if (todoTask == null) return Problem(detail: "Couldn't create task", title: "Internal server error");
-            
+            var todoTask = await _todoTasksService.CreateAsync(taskDTO, cancellationToken);       
             return CreatedAtAction(nameof(GetById), new { id = todoTask.Id }, todoTask);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveById(Guid id)
+        public async Task<IActionResult> RemoveById(Guid id, CancellationToken cancellationToken)
         {
-            await _todoTasksService.RemoveById(id);
-            // Check on exceptions when I'll add middleware
+            await _todoTasksService.RemoveById(id, cancellationToken);
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchById(Guid id, [FromBody] TodoTaskUpdateDTO todoTaskUpdateDTO)
+        public async Task<IActionResult> PatchById(Guid id, [FromBody] TodoTaskUpdateDTO todoTaskUpdateDTO, CancellationToken cancellationToken)
         {
-            await _todoTasksService.UpdatePartialAsync(id, todoTaskUpdateDTO);
+            await _todoTasksService.UpdatePartialAsync(id, todoTaskUpdateDTO, cancellationToken);
             return NoContent();
         }
     }

@@ -4,11 +4,11 @@ namespace TodoApi.DataAccess.Repositories
 {
     public interface ITodoTaskRepository
     {
-        Task<TodoTask?> GetByIdAsync(Guid id);
-        Task<List<TodoTask>> GetAllAsync();
-        Task AddAsync(TodoTask todoTask);
+        Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<List<TodoTask>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task AddAsync(TodoTask todoTask, CancellationToken cancellationToken = default);
         void Remove(TodoTask task);
-        Task SaveChangesAsync();
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }
 }

@@ -7,19 +7,19 @@ namespace TodoApi.DataAccess.Repositories
     {
         private readonly TodoDbContext _dbContext = context;
 
-        public async Task<TodoTask?> GetByIdAsync(Guid id)
+        public async Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Tasks.FindAsync(id);
+            return await _dbContext.Tasks.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<TodoTask>> GetAllAsync()
+        public async Task<List<TodoTask>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Tasks.ToListAsync();
+            return await _dbContext.Tasks.ToListAsync(cancellationToken);
         }
 
-        public async Task AddAsync(TodoTask todoTask)
+        public async Task AddAsync(TodoTask todoTask, CancellationToken cancellationToken = default)
         {
-            await _dbContext.Tasks.AddAsync(todoTask);
+            await _dbContext.Tasks.AddAsync(todoTask, cancellationToken);
         }
 
         public void Remove(TodoTask task)
@@ -27,9 +27,9 @@ namespace TodoApi.DataAccess.Repositories
             _dbContext.Tasks.Remove(task);
         }
 
-        public async Task SaveChangesAsync()
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

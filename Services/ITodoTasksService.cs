@@ -4,10 +4,10 @@ namespace TodoApi.Services
 {
     public interface ITodoTasksService
     {
-        Task<List<TodoTask>> GetAllAsync();
-        Task<TodoTask> GetByIdAsync(Guid id);
-        Task<TodoTask> CreateAsync(TodoTaskDTO todoTaskDTO);
-        Task RemoveById(Guid id);
-        Task UpdatePartialAsync(Guid id, TodoTaskUpdateDTO todoTaskUpdateDTO);
+        Task<IEnumerable<TodoTaskDTO>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<TodoTaskDTO> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<TodoTaskDTO> CreateAsync(TodoTaskCreateDTO todoTaskDTO, CancellationToken cancellationToken = default);
+        Task RemoveById(Guid id, CancellationToken cancellationToken = default);
+        Task UpdatePartialAsync(Guid id, TodoTaskUpdateDTO todoTaskUpdateDTO, CancellationToken cancellationToken = default);
     }
 }
