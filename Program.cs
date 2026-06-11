@@ -25,6 +25,9 @@ namespace TodoApi
                 var connectionString = builder.Configuration.GetConnectionString("ApplicationDBContext") ?? throw new InvalidOperationException("Connection string ApplicationDBContext not found!");
 
                 builder.Host.UseSerilog();
+                builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+                builder.Services.AddProblemDetails();
+
                 builder.Services.AddControllers();
                 builder.Services.AddSwaggerGen(o =>
                 {
@@ -34,7 +37,11 @@ namespace TodoApi
                 builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
                 builder.Services.AddScoped<ITodoTasksService, TodoTasksService>();
 
+                /*----------------------------------------------------*/
+
                 var app = builder.Build();
+
+                app.UseExceptionHandler();
 
                 if (app.Environment.IsDevelopment())
                 {
