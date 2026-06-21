@@ -1,9 +1,12 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System.Reflection;
 using TodoApi.DataAccess;
 using TodoApi.DataAccess.Repositories;
 using TodoApi.Middleware;
 using TodoApi.Services;
-using Serilog;
 
 namespace TodoApi
 {
@@ -36,6 +39,9 @@ namespace TodoApi
                 builder.Services.AddDbContext<TodoDbContext>(o => o.UseSqlServer(connectionString));
                 builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
                 builder.Services.AddScoped<ITodoTasksService, TodoTasksService>();
+
+                builder.Services.AddFluentValidationAutoValidation();
+                builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
                 /*----------------------------------------------------*/
 
