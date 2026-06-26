@@ -14,8 +14,8 @@ namespace TodoApp.Api.Controllers
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll(CancellationToken cancellationToken) 
-            => Ok(await _todoTasksService.GetAllAsync(cancellationToken)); // Maybe show NoContent() when list is empty?
+        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll([FromQuery] TodoTaskSearchQuery query, CancellationToken cancellationToken) 
+            => Ok(await _todoTasksService.GetAllAsync(query, cancellationToken)); // Maybe show NoContent() when list is empty?
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoTaskDTO>> GetById(Guid id, CancellationToken cancellationToken)

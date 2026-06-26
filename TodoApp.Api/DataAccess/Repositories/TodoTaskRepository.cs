@@ -12,9 +12,41 @@ namespace TodoApp.Api.DataAccess.Repositories
             return await _dbContext.Tasks.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<TodoTask>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<TodoTask>> GetAllAsync(TodoTaskSearchQuery query, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Tasks.ToListAsync(cancellationToken);
+            IQueryable<TodoTask> queryable = _dbContext.Tasks;
+
+            if(!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                var searchTerm = query.SearchTerm.Trim().ToLower();
+/*EFCore cant translate cultural info into sql, so this basicly means I need to ensure on DB level rule of specific casing*/
+#pragma warning disable CA1862
+                queryable = queryable.Where(t => t.Name.ToLower().Contains(searchTerm)
+                    || (t.Description != null && t.Description.ToLower().Contains(searchTerm)));
+#pragma warning restore CA1862
+            }
+
+            if (query.Status.HasValue)
+            {
+                queryable = queryable.Where(t => t.Status == query.Status.Value);
+            }
+
+            if (query.Priority.HasValue)
+            {
+                queryable = queryable.Where(t => t.Priority == query.Priority.Value);
+            }
+
+            queryable = query.SortBy?.ToLower() switch
+            {
+                "name" => query.IsDescending ? queryable.OrderByDescending(t => t.Name) : queryable.OrderBy(t => t.Name),
+                "date" => query.IsDescending ? queryable.OrderByDescending(t => t.DueDate) : queryable.OrderBy(t => t.DueDate),
+                "priority" => query.IsDescending 
+                    ? queryable.OrderByDescending(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0) 
+                    : queryable.OrderBy(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0),
+                _ => queryable.OrderBy(t => t.CreatedAt)
+            };
+
+            return await queryable.ToListAsync(cancellationToken);
         }
 
         public async Task AddAsync(TodoTask todoTask, CancellationToken cancellationToken = default)

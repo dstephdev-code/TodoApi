@@ -22,11 +22,11 @@ namespace TodoApp.Api.Services
 
             return MapToDto(todoTask);
         }
-        public async Task<IEnumerable<TodoTaskDTO>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TodoTaskDTO>> GetAllAsync(TodoTaskSearchQuery query, CancellationToken cancellationToken = default)
         {
             // Do I need any logic in getting list? Maybe sorting in future. For now we even don't have any possible exception here.
-            _logger.LogInformation("Trying to get all the tasks");
-            var todoTasks = await _todoTaskRepository.GetAllAsync(cancellationToken);
+            _logger.LogInformation("Trying to get all the tasks with applied filters");
+            var todoTasks = await _todoTaskRepository.GetAllAsync(query, cancellationToken);
             _logger.LogInformation("Succesfully got all the tasks");
 
             return todoTasks.Select(MapToDto);
