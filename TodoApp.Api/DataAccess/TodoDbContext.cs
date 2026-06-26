@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TodoApi.Model;
+using TodoApp.Api.Model;
 
-namespace TodoApi.DataAccess
+namespace TodoApp.Api.DataAccess
 {
     public class TodoDbContext(DbContextOptions<TodoDbContext> dbContextOptions) : DbContext(dbContextOptions)
     {

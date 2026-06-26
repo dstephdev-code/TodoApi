@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace TodoApi.Middleware
+namespace TodoApp.Api.Middleware
 {
     public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
     {

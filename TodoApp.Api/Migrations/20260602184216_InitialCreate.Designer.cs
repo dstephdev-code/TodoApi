@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TodoApi.DataAccess;
+using TodoApp.Api.DataAccess;
 
 #nullable disable
 
-namespace TodoApi.Migrations
+namespace TodoApp.Api.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
     [Migration("20260602184216_InitialCreate")]
@@ -25,7 +25,7 @@ namespace TodoApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TodoApi.Model.TaskAssignment", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.TaskAssignment", b =>
                 {
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
@@ -40,7 +40,7 @@ namespace TodoApi.Migrations
                     b.ToTable("TaskAssignments");
                 });
 
-            modelBuilder.Entity("TodoApi.Model.TodoTask", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.TodoTask", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace TodoApi.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TodoApi.Model.User", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,15 +93,15 @@ namespace TodoApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TodoApi.Model.TaskAssignment", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.TaskAssignment", b =>
                 {
-                    b.HasOne("TodoApi.Model.TodoTask", "Task")
+                    b.HasOne("TodoApp.Api.Model.TodoTask", "Task")
                         .WithMany("TaskAssignment")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TodoApi.Model.User", "User")
+                    b.HasOne("TodoApp.Api.Model.User", "User")
                         .WithMany("TaskAssignments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -112,12 +112,12 @@ namespace TodoApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TodoApi.Model.TodoTask", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.TodoTask", b =>
                 {
                     b.Navigation("TaskAssignment");
                 });
 
-            modelBuilder.Entity("TodoApi.Model.User", b =>
+            modelBuilder.Entity("TodoApp.Api.Model.User", b =>
                 {
                     b.Navigation("TaskAssignments");
                 });

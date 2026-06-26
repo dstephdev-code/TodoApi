@@ -1,4 +1,4 @@
-﻿namespace TodoApi.Exceptions
+﻿namespace TodoApp.Api.Exceptions
 {
     public class NotFoundException(string message) : Exception(message)
     {

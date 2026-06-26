@@ -1,12 +1,12 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using TodoApi.DataAccess;
-using TodoApi.DataAccess.Repositories;
-using TodoApi.Middleware;
-using TodoApi.Services;
+using TodoApp.Api.DataAccess;
+using ToTodoApp.ApidoApi.DataAccess.Repositories;
+using TodoApp.Api.Middleware;
+using TodoApp.Api.Services;
 
-namespace TodoApi
+namespace TodoApp.Api
 {
     public class Program
     {

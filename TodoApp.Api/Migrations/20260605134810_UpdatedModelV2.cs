@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TodoApi.Migrations
+namespace TodoApp.Api.Migrations
 {
     /// <inheritdoc />
     public partial class UpdatedModelV2 : Migration

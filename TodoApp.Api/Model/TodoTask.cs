@@ -1,6 +1,6 @@
-﻿using TodoApi.Model.Enums;
+﻿using TodoApp.Api.Model.Enums;
 
-namespace TodoApi.Model
+namespace TodoApp.Api.Model
 {
     public class TodoTask
     {

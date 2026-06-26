@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Exceptions;
+using TodoApp.Api.Exceptions;
 
-namespace TodoApi.Middleware
+namespace TodoApp.Api.Middleware
 {
     public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {

@@ -1,8 +1,8 @@
-﻿using TodoApi.DataAccess.Repositories;
-using TodoApi.Exceptions;
-using TodoApi.Model;
+﻿using TodoApp.Api.DataAccess.Repositories;
+using TodoApp.Api.Exceptions;
+using TodoApp.Api.Model;
 
-namespace TodoApi.Services
+namespace TodoApp.Api.Services
 {
     /***
      * Here we have CA1873. To solve this we need to make a Source Generators for logging, but for now it looks for me as overengineering.

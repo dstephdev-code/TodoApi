@@ -1,4 +1,4 @@
-﻿namespace TodoApi.Model.Enums
+﻿namespace TodoApp.Api.Model.Enums
 {
     public enum TaskStatusEnum
     {

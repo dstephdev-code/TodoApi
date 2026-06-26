@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Model;
-using TodoApi.Services;
+using TodoApp.Api.Model;
+using TodoApp.Api.Services;
 
-namespace TodoApi.Controllers
+namespace TodoApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

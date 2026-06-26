@@ -1,6 +1,6 @@
-﻿using TodoApi.Model;
+﻿using TodoApp.Api.Model;
 
-namespace TodoApi.Services
+namespace TodoApp.Api.Services
 {
     public interface ITodoTasksService
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoApi.Model;
+using TodoApp.Api.Model;
 
-namespace TodoApi.DataAccess.Repositories
+namespace TodoApp.Api.DataAccess.Repositories
 {
     public class TodoTaskRepository(TodoDbContext context) : ITodoTaskRepository
     {
