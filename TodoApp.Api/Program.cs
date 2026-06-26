@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using TodoApp.Api.DataAccess;
-using ToTodoApp.ApidoApi.DataAccess.Repositories;
+using TodoApp.Api.DataAccess.Repositories;
 using TodoApp.Api.Middleware;
 using TodoApp.Api.Services;
 
