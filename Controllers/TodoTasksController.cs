@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using TodoApi.Model;
 using TodoApi.Services;
 
@@ -6,8 +7,10 @@ namespace TodoApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TodoTasksController(ITodoTasksService todoTasksService) : ControllerBase
+    public class TodoTasksController(IValidator<TodoTaskCreateDTO> taskCreateValidator, IValidator<TodoTaskUpdateDTO> taskUpdateValidator, ITodoTasksService todoTasksService) : ControllerBase
     {
+        private readonly IValidator<TodoTaskCreateDTO> _taskCreateValidator = taskCreateValidator;
+        private readonly IValidator<TodoTaskUpdateDTO> _taskUpdateValidator = taskUpdateValidator;
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
@@ -24,6 +27,11 @@ namespace TodoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoTaskDTO>> Create([FromBody] TodoTaskCreateDTO taskDTO, CancellationToken cancellationToken)
         {
+            var validationResult = await _taskCreateValidator.ValidateAsync(taskDTO, cancellationToken);
+
+            if (!validationResult.IsValid)
+                throw new FluentValidation.ValidationException(validationResult.Errors);
+
             var todoTask = await _todoTasksService.CreateAsync(taskDTO, cancellationToken);       
             return CreatedAtAction(nameof(GetById), new { id = todoTask.Id }, todoTask);
         }
@@ -38,6 +46,11 @@ namespace TodoApi.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchById(Guid id, [FromBody] TodoTaskUpdateDTO todoTaskUpdateDTO, CancellationToken cancellationToken)
         {
+            var validationResult = await _taskUpdateValidator.ValidateAsync(todoTaskUpdateDTO, cancellationToken);
+
+            if (!validationResult.IsValid)
+                throw new FluentValidation.ValidationException(validationResult.Errors);
+
             await _todoTasksService.UpdatePartialAsync(id, todoTaskUpdateDTO, cancellationToken);
             return NoContent();
         }

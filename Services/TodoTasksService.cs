@@ -101,6 +101,7 @@ namespace TodoApi.Services
             Description = task.Description,
             CreatedAt = task.CreatedAt,
             DueDate = task.DueDate,
+            UpdatedAt = task.UpdatedAt,
             Status = task.Status,
             Priority = task.Priority
         };

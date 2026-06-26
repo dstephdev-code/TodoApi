@@ -21,6 +21,14 @@ namespace TodoApi.Validators
                 .NotEmpty().WithMessage("Complition date is mandatory!")
                 .GreaterThan(DateTimeOffset.UtcNow).WithMessage("Complition date must not be in the past!")
                 .When(x => x.DueDate != null);
+
+            RuleFor(x => x.Status)
+                .IsInEnum().WithMessage("Incorrect type of status!")
+                .When(x => x.Status != null); ;
+
+            RuleFor(x => x.Priority)
+                .IsInEnum().WithMessage("Incorrect type of priority!")
+                .When(x => x.Priority != null); ;
         }
     }
 }
