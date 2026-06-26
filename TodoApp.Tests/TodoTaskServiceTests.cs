@@ -86,5 +86,70 @@ namespace TodoApp.Tests
             await _repositoryMock.Received(1).AddAsync(Arg.Any<TodoTask>(), cancellationToken);
             await _repositoryMock.Received(1).SaveChangesAsync(cancellationToken);
         }
+
+        [Fact]
+        public async Task GetAllAsync_WithFilters_ReturnsMappedDTOCollection()
+        {
+            var cancellationToken = CancellationToken.None;
+
+            var query = new TodoTaskSearchQuery
+            {
+                SearchTerm = "Fix",
+                Status = TaskStatusEnum.Created,
+                Priority = TaskPriorityEnum.High,
+                SortBy = "priority",
+                IsDescending = true
+            };
+
+            var repoResult = new List<TodoTask>
+            {
+                new TodoTask
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Fix bug",
+                    Description = "There is a bug",
+                    Status = TaskStatusEnum.Created,
+                    Priority = TaskPriorityEnum.High
+                }
+            };
+
+            _repositoryMock.GetAllAsync(query, cancellationToken).Returns(repoResult);
+
+            var result = await _service.GetAllAsync(query, cancellationToken);
+
+            Assert.NotNull(result);
+            var resultList = Assert.IsAssignableFrom<IEnumerable<TodoTaskDTO>>(result);
+            var singleDTO = Assert.Single(resultList);
+
+            Assert.Equal(repoResult[0].Id, singleDTO.Id);
+            Assert.Equal("Fix bug", singleDTO.Name);
+            Assert.Equal("There is a bug", singleDTO.Description);
+            Assert.Equal(TaskStatusEnum.Created, singleDTO.Status);
+            Assert.Equal(TaskPriorityEnum.High, singleDTO.Priority);
+
+            await _repositoryMock.Received(1).GetAllAsync(query, cancellationToken);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_WithEmptyFilters_ReturnsAllTasks()
+        {
+            var cancellationToken = CancellationToken.None;
+            var emptyQuery = new TodoTaskSearchQuery();
+
+            var repoResult = new List<TodoTask>
+            {
+                new TodoTask { Id = Guid.NewGuid(), Name = "Task 1", Description = "Task 1 description" },
+                new TodoTask { Id = Guid.NewGuid(), Name = "Task 2", Description = "Task 2 description" }
+            };
+
+            _repositoryMock.GetAllAsync(emptyQuery, cancellationToken).Returns(repoResult);
+
+            var result = await _service.GetAllAsync(emptyQuery, cancellationToken);
+
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count());
+
+            await _repositoryMock.Received(1).GetAllAsync(emptyQuery, cancellationToken);
+        }
     }
 }
