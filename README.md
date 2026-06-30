@@ -26,6 +26,7 @@ Id is generated on .NET side, type of Guid. Enums are stored on DB side as strin
 *> 05.06.2026* >>> Implemented Create, GetAll and GetById methods.<br>
 *> 06.06.2026* >>> Implemented Remove method and extracted logic to separate services module.<br>
 *> 08.06.2026* >>> Implemented Patch method. Now we have all CRUD-ops but without validation and logic.<br>
-*> 26.06.2026* >>> Added fluent validation for create and patch methods and tests with xUnit. Reorganized project
+*> 26.06.2026* >>> Added fluent validation for create and patch methods and tests with xUnit. Reorganized project.<br>
+*> 30.06.2026* >>> Added filtration, sorting and pagination for GetAll method.
 
 *License MIT &copy;2026*
