@@ -9,12 +9,12 @@ namespace TodoApp.Api.DataAccess.Repositories
 
         public async Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Tasks.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _dbContext.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         public async Task<List<TodoTask>> GetAllAsync(TodoTaskSearchQuery query, CancellationToken cancellationToken = default)
         {
-            IQueryable<TodoTask> queryable = _dbContext.Tasks;
+            IQueryable<TodoTask> queryable = _dbContext.Tasks.AsNoTracking();
 
             if(!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
