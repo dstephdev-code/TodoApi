@@ -14,11 +14,13 @@ namespace TodoApp.Api.DataAccess.Configurations
 
             builder.Property(p => p.Name)
                 .HasMaxLength(64)
-                .IsRequired();
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS"); // Set as default in MSSQL, but not default in every DB, so best to keep it as explicit configuration rule.
 
             builder.Property(p => p.Description)
                 .HasMaxLength(256)
-                .IsRequired();
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS"); // Also, in modern time better to use Latin1_General_100_CI_AS, but not in this projects. Way to migrate is to copy-delete existing row, which is tiring.
 
             builder.Property(p => p.CreatedAt)
                 .HasColumnType("datetimeoffset(3)")

@@ -18,12 +18,12 @@ namespace TodoApp.Api.DataAccess.Repositories
 
             if(!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                var searchTerm = query.SearchTerm.Trim().ToLower();
+                var searchTerm = query.SearchTerm.Trim();
 
 /* EFCore cant translate cultural info into sql, so this basicly means I need to ensure on DB level rule of specific casing */
 #pragma warning disable CA1862
-                queryable = queryable.Where(t => t.Name.ToLower().Contains(searchTerm)
-                    || (t.Description != null && t.Description.ToLower().Contains(searchTerm)));
+                queryable = queryable.Where(t => t.Name.Contains(searchTerm)
+                    || (t.Description != null && t.Description.Contains(searchTerm)));
 #pragma warning restore CA1862
 
             }
