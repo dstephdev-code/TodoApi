@@ -7,15 +7,27 @@ namespace TodoApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TodoTasksController(IValidator<TodoTaskCreateDTO> taskCreateValidator, IValidator<TodoTaskUpdateDTO> taskUpdateValidator, ITodoTasksService todoTasksService) : ControllerBase
+    public class TodoTasksController(IValidator<TodoTaskSearchQuery> taskGetAllValidator, 
+                                     IValidator<TodoTaskCreateDTO> taskCreateValidator, 
+                                     IValidator<TodoTaskUpdateDTO> taskUpdateValidator, 
+                                     ITodoTasksService todoTasksService) 
+        : ControllerBase
     {
+        private readonly IValidator<TodoTaskSearchQuery> _taskGetAllValidator = taskGetAllValidator;
         private readonly IValidator<TodoTaskCreateDTO> _taskCreateValidator = taskCreateValidator;
         private readonly IValidator<TodoTaskUpdateDTO> _taskUpdateValidator = taskUpdateValidator;
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll([FromQuery] TodoTaskSearchQuery query, CancellationToken cancellationToken) 
-            => Ok(await _todoTasksService.GetAllAsync(query, cancellationToken)); // Maybe show NoContent() when list is empty?
+        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll([FromQuery] TodoTaskSearchQuery query, CancellationToken cancellationToken)
+        {
+            var validationResult = await _taskGetAllValidator.ValidateAsync(query, cancellationToken);
+
+            if (!validationResult.IsValid)
+                throw new FluentValidation.ValidationException(validationResult.Errors);
+
+            return Ok(await _todoTasksService.GetAllAsync(query, cancellationToken));
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoTaskDTO>> GetById(Guid id, CancellationToken cancellationToken)

@@ -24,6 +24,21 @@ namespace TodoApp.Api.DataAccess.Repositories
                     || (t.Description != null && t.Description.Contains(searchTerm)));
             }
 
+            if (query.CreatedAfter.HasValue)
+            {
+                queryable = queryable.Where(t => t.CreatedAt > query.CreatedAfter.Value);
+            }
+
+            if (query.CreatedBefore.HasValue)
+            {
+                queryable = queryable.Where(t => t.CreatedAt < query.CreatedBefore.Value);
+            }
+
+            if (query.CompletionDateBefore.HasValue)
+            {
+                queryable = queryable.Where(t => t.DueDate < query.CompletionDateBefore.Value);
+            }
+
             if (query.Status.HasValue)
             {
                 queryable = queryable.Where(t => t.Status == query.Status.Value);
@@ -36,12 +51,15 @@ namespace TodoApp.Api.DataAccess.Repositories
 
             queryable = query.SortBy?.ToLower() switch
             {
-                "name" => query.IsDescending ? queryable.OrderByDescending(t => t.Name) : queryable.OrderBy(t => t.Name),
-                "date" => query.IsDescending ? queryable.OrderByDescending(t => t.DueDate) : queryable.OrderBy(t => t.DueDate),
+                "date" => query.IsDescending ? queryable.OrderByDescending(t => t.CreatedAt) : queryable.OrderBy(t => t.CreatedAt),
+                "duedate" => query.IsDescending ? queryable.OrderByDescending(t => t.DueDate) : queryable.OrderBy(t => t.DueDate),
+                "status" => query.IsDescending
+                    ? queryable.OrderByDescending(t => t.Status == Model.Enums.TaskStatusEnum.Canceled ? 3 : t.Status == Model.Enums.TaskStatusEnum.Completed ? 2 : t.Status == Model.Enums.TaskStatusEnum.InProgress ? 1 : 0)
+                    : queryable.OrderBy(t => t.Status == Model.Enums.TaskStatusEnum.Canceled ? 3 : t.Status == Model.Enums.TaskStatusEnum.Completed ? 2 : t.Status == Model.Enums.TaskStatusEnum.InProgress ? 1 : 0),
                 "priority" => query.IsDescending 
                     ? queryable.OrderByDescending(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0) 
                     : queryable.OrderBy(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0),
-                _ => queryable.OrderBy(t => t.CreatedAt)
+                _ => queryable.OrderBy(t => t.Name)
             };
 
             queryable = queryable.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize);
