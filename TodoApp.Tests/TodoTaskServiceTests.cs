@@ -61,7 +61,7 @@ namespace TodoApp.Tests
         }
 
         [Fact]
-        public async Task CreateAsync_WithValidDTO_SavesTaskAndReturnsDTO()
+        public async Task CreateAsync_WithValidDTO_SavesTaskAndReturnsResponse()
         {
             var cancellationToken = CancellationToken.None;
             var createRequest = new CreateTaskRequest("New Task", "Description", DateTimeOffset.UtcNow.AddDays(1), TaskPriorityEnum.Medium);
