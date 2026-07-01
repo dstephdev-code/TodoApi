@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using TodoApp.Api.Model.TaskAssignment.Dto;
 using TodoApp.Api.Model.TodoTasks.Dto;
 using TodoApp.Api.Services;
 
@@ -10,13 +11,15 @@ namespace TodoApp.Api.Controllers
     public class TodoTasksController(
                 IValidator<GetTasksQuery> taskGetAllValidator, 
                 IValidator<CreateTaskRequest> taskCreateValidator, 
-                IValidator<UpdateTaskRequest> taskUpdateValidator, 
+                IValidator<UpdateTaskRequest> taskUpdateValidator,
+                IValidator<AssignUserRequest> taskAssignValidator,
                 ITodoTasksService todoTasksService
         ) : ControllerBase
     {
         private readonly IValidator<GetTasksQuery> _taskGetAllValidator = taskGetAllValidator;
         private readonly IValidator<CreateTaskRequest> _taskCreateValidator = taskCreateValidator;
         private readonly IValidator<UpdateTaskRequest> _taskUpdateValidator = taskUpdateValidator;
+        private readonly IValidator<AssignUserRequest> _taskAssignValidator = taskAssignValidator;
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
@@ -65,6 +68,19 @@ namespace TodoApp.Api.Controllers
                 throw new ValidationException(validationResult.Errors);
 
             await _todoTasksService.UpdatePartialAsync(id, taskDto, cancellationToken);
+            return NoContent();
+        }
+
+        [HttpPost("{taskId}/assignments")]
+        public async Task<IActionResult> AssignUserAsync(Guid taskId, [FromBody] AssignUserRequest request, CancellationToken cancellationToken)
+        {
+            var validationResult = await _taskAssignValidator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.Errors);
+
+            await _todoTasksService.AssignUserAsync(taskId, request, cancellationToken);
+
             return NoContent();
         }
     }

@@ -1,13 +1,16 @@
 ﻿using TodoApp.Api.DataAccess.Repositories;
 using TodoApp.Api.Exceptions;
+using TodoApp.Api.Model.TaskAssignment.Dto;
 using TodoApp.Api.Model.TodoTasks;
 using TodoApp.Api.Model.TodoTasks.Dto;
+using TodoApp.Api.Model.User;
 
 namespace TodoApp.Api.Services
 {
-    public class TodoTasksService(ITodoTaskRepository todoTaskRepository, ILogger<TodoTasksService> logger) : ITodoTasksService
+    public class TodoTasksService(ITodoTaskRepository todoTaskRepository, IUserRepository userRepository, ILogger<TodoTasksService> logger) : ITodoTasksService
     {
         private readonly ITodoTaskRepository _todoTaskRepository = todoTaskRepository;
+        private readonly IUserRepository _userRepository = userRepository;
         private readonly ILogger<TodoTasksService> _logger = logger;
 
         public async Task<TaskResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -54,7 +57,17 @@ namespace TodoApp.Api.Services
             await _todoTaskRepository.SaveChangesAsync(cancellationToken);
         }
 
-        private async Task<TodoTask> GetOrThrowAsync(Guid id, CancellationToken cancellationToken)
+        public async Task AssignUserAsync(Guid id, AssignUserRequest request, CancellationToken cancellationToken = default)
+        {
+            TodoTask task = await GetOrThrowAsync(id, cancellationToken);
+            User user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken)
+                ?? throw new NotFoundException($"User with id {request.UserId} was not found!");
+
+            task.AssignUser(user, request.AssignedByUserId, request.Comment);
+            await _todoTaskRepository.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task<TodoTask> GetOrThrowAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var todoTask = await _todoTaskRepository.GetByIdAsync(id, cancellationToken)
                 ?? throw new NotFoundException($"ToDo task by id {id} was not found!");

@@ -1,5 +1,4 @@
 ﻿using TodoApp.Api.Model.Enums;
-using TodoApp.Api.Model.TaskAssignment;
 
 namespace TodoApp.Api.Model.TodoTasks
 {
@@ -64,6 +63,9 @@ namespace TodoApp.Api.Model.TodoTasks
         }
         public void AssignUser(User.User user, Guid assignedByUserId, string? comment)
         {
+            if (Status == TaskStatusEnum.Canceled || Status == TaskStatusEnum.Completed)
+                throw new InvalidOperationException("Task is already completed or canceled!");
+
             if (!user.IsActive)
                 throw new InvalidOperationException("User is inactive");
 
