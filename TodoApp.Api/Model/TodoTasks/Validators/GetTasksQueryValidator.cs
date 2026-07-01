@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks.Dto;
 
-namespace TodoApp.Api.Validators
+namespace TodoApp.Api.Model.TodoTasks.Validators
 {
-    public class GetTodoTaskQueryValidator : AbstractValidator <TodoTaskSearchQuery>
+    public class GetTasksQueryValidator : AbstractValidator <GetTasksQuery>
     {
-        public GetTodoTaskQueryValidator()
+        public GetTasksQueryValidator()
         {
             RuleFor(x => x.SearchTerm)
                 .Length(1, 256).WithMessage("Search term length should be between 1 and 256 symbols")

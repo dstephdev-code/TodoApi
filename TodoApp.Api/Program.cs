@@ -23,7 +23,8 @@ namespace TodoApp.Api
                 Log.Information("Application is starting...");
 
                 var builder = WebApplication.CreateBuilder(args);
-                var connectionString = builder.Configuration.GetConnectionString("ApplicationDBContext") ?? throw new InvalidOperationException("Connection string ApplicationDBContext not found!");
+                var connectionString = builder.Configuration.GetConnectionString("ApplicationDBContext") 
+                    ?? throw new InvalidOperationException("Connection string ApplicationDBContext not found!");
 
                 builder.Host.UseSerilog();
                 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

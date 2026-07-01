@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks;
 
 namespace TodoApp.Api.DataAccess
 {

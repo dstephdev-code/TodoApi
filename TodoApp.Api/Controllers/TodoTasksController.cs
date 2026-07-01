@@ -1,50 +1,51 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks.Dto;
 using TodoApp.Api.Services;
 
 namespace TodoApp.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TodoTasksController(IValidator<TodoTaskSearchQuery> taskGetAllValidator, 
-                                     IValidator<TodoTaskCreateDTO> taskCreateValidator, 
-                                     IValidator<TodoTaskUpdateDTO> taskUpdateValidator, 
-                                     ITodoTasksService todoTasksService) 
-        : ControllerBase
+    public class TodoTasksController(
+                IValidator<GetTasksQuery> taskGetAllValidator, 
+                IValidator<CreateTaskRequest> taskCreateValidator, 
+                IValidator<UpdateTaskRequest> taskUpdateValidator, 
+                ITodoTasksService todoTasksService
+        ) : ControllerBase
     {
-        private readonly IValidator<TodoTaskSearchQuery> _taskGetAllValidator = taskGetAllValidator;
-        private readonly IValidator<TodoTaskCreateDTO> _taskCreateValidator = taskCreateValidator;
-        private readonly IValidator<TodoTaskUpdateDTO> _taskUpdateValidator = taskUpdateValidator;
+        private readonly IValidator<GetTasksQuery> _taskGetAllValidator = taskGetAllValidator;
+        private readonly IValidator<CreateTaskRequest> _taskCreateValidator = taskCreateValidator;
+        private readonly IValidator<UpdateTaskRequest> _taskUpdateValidator = taskUpdateValidator;
         private readonly ITodoTasksService _todoTasksService = todoTasksService;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoTaskDTO>>> GetAll([FromQuery] TodoTaskSearchQuery query, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<TaskResponse>>> GetAll([FromQuery] GetTasksQuery query, CancellationToken cancellationToken)
         {
             var validationResult = await _taskGetAllValidator.ValidateAsync(query, cancellationToken);
 
             if (!validationResult.IsValid)
-                throw new FluentValidation.ValidationException(validationResult.Errors);
+                throw new ValidationException(validationResult.Errors);
 
             return Ok(await _todoTasksService.GetAllAsync(query, cancellationToken));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoTaskDTO>> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<TaskResponse>> GetById(Guid id, CancellationToken cancellationToken)
         {
             var task = await _todoTasksService.GetByIdAsync(id, cancellationToken);
             return Ok(task);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TodoTaskDTO>> Create([FromBody] TodoTaskCreateDTO taskDTO, CancellationToken cancellationToken)
+        public async Task<ActionResult<TaskResponse>> Create([FromBody] CreateTaskRequest taskDto, CancellationToken cancellationToken)
         {
-            var validationResult = await _taskCreateValidator.ValidateAsync(taskDTO, cancellationToken);
+            var validationResult = await _taskCreateValidator.ValidateAsync(taskDto, cancellationToken);
 
             if (!validationResult.IsValid)
-                throw new FluentValidation.ValidationException(validationResult.Errors);
+                throw new ValidationException(validationResult.Errors);
 
-            var todoTask = await _todoTasksService.CreateAsync(taskDTO, cancellationToken);       
+            var todoTask = await _todoTasksService.CreateAsync(taskDto, cancellationToken);       
             return CreatedAtAction(nameof(GetById), new { id = todoTask.Id }, todoTask);
         }
 
@@ -56,14 +57,14 @@ namespace TodoApp.Api.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchById(Guid id, [FromBody] TodoTaskUpdateDTO todoTaskUpdateDTO, CancellationToken cancellationToken)
+        public async Task<IActionResult> PatchById(Guid id, [FromBody] UpdateTaskRequest taskDto, CancellationToken cancellationToken)
         {
-            var validationResult = await _taskUpdateValidator.ValidateAsync(todoTaskUpdateDTO, cancellationToken);
+            var validationResult = await _taskUpdateValidator.ValidateAsync(taskDto, cancellationToken);
 
             if (!validationResult.IsValid)
-                throw new FluentValidation.ValidationException(validationResult.Errors);
+                throw new ValidationException(validationResult.Errors);
 
-            await _todoTasksService.UpdatePartialAsync(id, todoTaskUpdateDTO, cancellationToken);
+            await _todoTasksService.UpdatePartialAsync(id, taskDto, cancellationToken);
             return NoContent();
         }
     }

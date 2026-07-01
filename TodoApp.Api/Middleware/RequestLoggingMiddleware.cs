@@ -2,6 +2,7 @@
 
 namespace TodoApp.Api.Middleware
 {
+#pragma warning disable CA1873
     public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggingMiddleware> logger)
     {
         private readonly RequestDelegate _next = next;
@@ -46,4 +47,5 @@ namespace TodoApp.Api.Middleware
             }
         }
     }
+#pragma warning restore CA1873
 }

@@ -1,13 +1,13 @@
-﻿using TodoApp.Api.Model;
+﻿using TodoApp.Api.Model.TodoTasks.Dto;
 
 namespace TodoApp.Api.Services
 {
     public interface ITodoTasksService
     {
-        Task<IEnumerable<TodoTaskDTO>> GetAllAsync(TodoTaskSearchQuery query, CancellationToken cancellationToken = default);
-        Task<TodoTaskDTO> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<TodoTaskDTO> CreateAsync(TodoTaskCreateDTO todoTaskDTO, CancellationToken cancellationToken = default);
+        Task<IEnumerable<TaskResponse>> GetAllAsync(GetTasksQuery query, CancellationToken cancellationToken = default);
+        Task<TaskResponse> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<TaskResponse> CreateAsync(CreateTaskRequest taskDto, CancellationToken cancellationToken = default);
         Task RemoveById(Guid id, CancellationToken cancellationToken = default);
-        Task UpdatePartialAsync(Guid id, TodoTaskUpdateDTO todoTaskUpdateDTO, CancellationToken cancellationToken = default);
+        Task UpdatePartialAsync(Guid id, UpdateTaskRequest taskDto, CancellationToken cancellationToken = default);
     }
 }

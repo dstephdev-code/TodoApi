@@ -1,4 +1,6 @@
-﻿namespace TodoApp.Api.Model
+﻿using TodoApp.Api.Model.TodoTasks;
+
+namespace TodoApp.Api.Model
 {
     public class TaskAssignment
     {

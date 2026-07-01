@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks;
 
 namespace TodoApp.Api.DataAccess.Configurations
 {

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks.Dto;
 
-namespace TodoApp.Api.Validators
+namespace TodoApp.Api.Model.TodoTasks.Validators
 {
-    public class CreateTodoTaskDTOValidator : AbstractValidator<TodoTaskCreateDTO>
+    public class CreateTaskRequestValidator : AbstractValidator<CreateTaskRequest>
     {
-        public CreateTodoTaskDTOValidator() 
+        public CreateTaskRequestValidator() 
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Task name is obligatory!")

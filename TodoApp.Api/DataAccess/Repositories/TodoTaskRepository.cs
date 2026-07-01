@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TodoTasks;
+using TodoApp.Api.Model.TodoTasks.Dto;
 
 namespace TodoApp.Api.DataAccess.Repositories
 {
@@ -12,7 +13,7 @@ namespace TodoApp.Api.DataAccess.Repositories
             return await _dbContext.Tasks.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task<List<TodoTask>> GetAllAsync(TodoTaskSearchQuery query, CancellationToken cancellationToken = default)
+        public async Task<List<TodoTask>> GetAllAsync(GetTasksQuery query, CancellationToken cancellationToken = default)
         {
             IQueryable<TodoTask> queryable = _dbContext.Tasks.AsNoTracking();
 
