@@ -10,7 +10,7 @@ namespace TodoApp.Api.DataAccess.Repositories
         private readonly TodoDbContext _dbContext = dbContext;
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
         public async Task<List<User>> GetAllAsync(GetUsersQuery query, CancellationToken cancellationToken = default)
         {
