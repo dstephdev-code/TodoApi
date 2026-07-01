@@ -13,7 +13,7 @@ namespace TodoApp.Api.Model.TodoTasks.Validators
 
             RuleFor(x => x.Description)
                 .NotEmpty().WithMessage("Task description should be filled!")
-                .MaximumLength(256).WithMessage("Task description should contain less than 257 symbols!");
+                .MaximumLength(1024).WithMessage("Task description should contain less than 1025 symbols!");
 
             RuleFor(x => x.DueDate)
                 .NotEmpty().WithMessage("Complition date is mandatory!")
