@@ -1,4 +1,5 @@
 ﻿using TodoApp.Api.Model.Enums;
+using TodoApp.Api.Model.TaskAssignment;
 
 namespace TodoApp.Api.Model.TodoTasks
 {
@@ -12,7 +13,7 @@ namespace TodoApp.Api.Model.TodoTasks
         public DateTimeOffset? UpdatedAt { get; private set; }
         public TaskStatusEnum Status { get; private set; }
         public TaskPriorityEnum Priority { get; private set; }
-        public ICollection<TaskAssignment> TaskAssignments { get; } = [];
+        public ICollection<TaskAssignment.TaskAssignment> TaskAssignments { get; } = [];
 
         private TodoTask() { }
         public TodoTask(string name, string description, DateTimeOffset dueDate, TaskPriorityEnum priority)
@@ -61,10 +62,22 @@ namespace TodoApp.Api.Model.TodoTasks
             Priority = priority.Value;
             SetUpdated();
         }
-        
+        public void AssignUser(User.User user, Guid assignedByUserId, string? comment)
+        {
+            if (!user.IsActive)
+                throw new InvalidOperationException("User is inactive");
+
+            if (TaskAssignments.Any(a => a.UserId == user.Id))
+                throw new InvalidOperationException("User is already assigned!");
+
+            TaskAssignments.Add(new TaskAssignment.TaskAssignment(Id, user.Id, assignedByUserId, comment));
+
+            SetUpdated();
+        }
         private void SetUpdated()
         {
             UpdatedAt = DateTimeOffset.UtcNow;
         }
+
     }
 }

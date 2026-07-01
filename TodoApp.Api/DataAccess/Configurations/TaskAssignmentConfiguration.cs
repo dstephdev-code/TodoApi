@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TaskAssignment;
 
 namespace TodoApp.Api.DataAccess.Configurations
 {
@@ -12,15 +12,48 @@ namespace TodoApp.Api.DataAccess.Configurations
             {
                 builder.ToTable("TaskAssignments");
 
-                builder.HasKey(o => new { o.TaskId, o.UserId });
+                builder.HasKey(a => a.Id);
 
-                builder.HasOne(p => p.Task)
-                    .WithMany(p => p.TaskAssignments)
-                    .HasForeignKey(fk => fk.TaskId);
+                builder.Property(a => a.Id)
+                    .ValueGeneratedNever();
 
-                builder.HasOne(p => p.User)
-                    .WithMany(p => p.TaskAssignments)
-                    .HasForeignKey(fk => fk.UserId);
+                builder.Property(a => a.TaskId)
+                    .IsRequired();
+
+                builder.Property(a => a.UserId)
+                    .IsRequired();
+
+                builder.Property(a => a.AssignedByUserId)
+                    .IsRequired();
+
+                builder.Property(a => a.AssignedAt)
+                    .HasColumnType("datetimeoffset(3)")
+                    .IsRequired();
+
+                builder.Property(a => a.Comment)
+                    .HasMaxLength(1024)
+                    .IsRequired();
+
+                builder.HasIndex(a => new 
+                {
+                    a.TaskId,
+                    a.UserId
+                }).IsUnique();
+
+                builder.HasOne(a => a.Task)
+                    .WithMany(t => t.TaskAssignments)
+                    .HasForeignKey(a => a.TaskId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.HasOne(a => a.User)
+                    .WithMany(u => u.TaskAssignments)
+                    .HasForeignKey(a => a.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                builder.HasOne(a => a.AssignedByUser)
+                    .WithMany()
+                    .HasForeignKey(a => a.AssignedByUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
             }
         }
     }

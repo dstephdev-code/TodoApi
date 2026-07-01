@@ -9,7 +9,7 @@
         public string Position { get; private set; } = null!;
         public DateTimeOffset CreatedAt { get; private set; }
         public bool IsActive { get; private set; }
-        public ICollection<TaskAssignment> TaskAssignments { get; } = [];
+        public ICollection<TaskAssignment.TaskAssignment> TaskAssignments { get; } = [];
 
         public string FullName => $"{FirstName} {LastName}";
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using TodoApp.Api.Model;
+using TodoApp.Api.Model.TaskAssignment;
 using TodoApp.Api.Model.TodoTasks;
 using TodoApp.Api.Model.User;
 

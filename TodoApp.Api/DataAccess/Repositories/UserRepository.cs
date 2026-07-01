@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoApp.Api.Model.TodoTasks;
 using TodoApp.Api.Model.User;
 using TodoApp.Api.Model.User.Dto;
 
