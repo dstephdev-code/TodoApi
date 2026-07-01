@@ -30,7 +30,7 @@ namespace TodoApp.Api.Model.TodoTasks
         {
             if (name is null || name == Name) return;
 
-            Name = name; // check if it copies or refers!
+            Name = name;
             SetUpdated();
         }
         public void ChangeDescription(string? description)

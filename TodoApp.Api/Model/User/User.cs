@@ -28,5 +28,29 @@
         {
             IsActive = false;
         }
+        public void ChangeFirstName(string? firstName)
+        {
+            if (firstName is null || firstName == FirstName) return;
+
+            FirstName = firstName;
+        }
+        public void ChangeLastName(string? lastName)
+        {
+            if (lastName is null || lastName == LastName) return;
+
+            LastName = lastName;
+        }
+        public void ChangeEmail(string? email)
+        {
+            if (email is null || email == Email) return;
+
+            Email = email;
+        }
+        public void ChangePosition(string? position)
+        {
+            if (position is null || position == Position) return;
+
+            Position = position;
+        }
     }
 }

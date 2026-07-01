@@ -36,8 +36,11 @@ namespace TodoApp.Api
                     o.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo { Title = "astroToDo.api", Version = "v1" });
                 });
                 builder.Services.AddDbContext<TodoDbContext>(o => o.UseSqlServer(connectionString));
+
                 builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
                 builder.Services.AddScoped<ITodoTasksService, TodoTasksService>();
+                builder.Services.AddScoped<IUserRepository, UserRepository>();
+                builder.Services.AddScoped<IUserService, UserService>();
 
                 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
