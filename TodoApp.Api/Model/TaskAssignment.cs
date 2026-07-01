@@ -6,7 +6,7 @@ namespace TodoApp.Api.Model
     {
         public Guid UserId { get; set; }
         public Guid TaskId { get; set; }
-        public User User { get; set; } = null!;
+        public User.User User { get; set; } = null!;
         public TodoTask Task { get; set; } = null!;
     }
 }

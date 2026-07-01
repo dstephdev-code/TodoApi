@@ -2,7 +2,6 @@
 using NSubstitute;
 using TodoApp.Api.DataAccess.Repositories;
 using TodoApp.Api.Services;
-using TodoApp.Api.Model;
 using TodoApp.Api.Model.Enums;
 using TodoApp.Api.Exceptions;
 using TodoApp.Api.Model.TodoTasks;
