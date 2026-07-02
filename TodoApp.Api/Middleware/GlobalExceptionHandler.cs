@@ -16,6 +16,7 @@ namespace TodoApp.Api.Middleware
                 NotFoundException => (StatusCodes.Status404NotFound, "Resource Not Found"),
                 BadRequestException => (StatusCodes.Status400BadRequest, "Bad Request"),
                 FluentValidation.ValidationException => (StatusCodes.Status400BadRequest, "One or more validation errors occured"),
+                DomainException => (StatusCodes.Status422UnprocessableEntity, "Action violates bussiness rules"),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error") // DB failed, problems with network, etc...
             };
 
