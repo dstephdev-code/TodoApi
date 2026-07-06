@@ -51,7 +51,7 @@ namespace TodoApp.Api.Services
             todoTask.ChangeName(taskDto.Name);
             todoTask.ChangeDescription(taskDto.Description);
             todoTask.ChangeDueDate(taskDto.DueDate);
-            todoTask.ChangeStatus(taskDto.Status);
+            // todoTask.ChangeStatus(taskDto.Status); //delete, added entity methods
             todoTask.ChangePriority(taskDto.Priority);
 
             await _todoTaskRepository.SaveChangesAsync(cancellationToken);
