@@ -115,5 +115,11 @@ namespace TodoApp.Api.Model.TodoTasks
             if (Status is TaskStatusEnum.Completed or TaskStatusEnum.Canceled)
                 throw new DomainException("Task is already completed or canceled.");
         }
+
+        public void EnsureCanBeDeleted()
+        {
+            if (TaskAssignments.Count != 0)
+                throw new DomainException("Task has assigned users.");
+        }
     }
 }

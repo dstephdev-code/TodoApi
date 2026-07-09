@@ -3,7 +3,7 @@ using TodoApp.Api.Model.TodoTasks.Dto;
 
 namespace TodoApp.Api.Model.TodoTasks.Validators
 {
-    public class UpdateTaskRequestValidator : AbstractValidator<UpdateTaskRequest>
+    public class UpdateTaskRequestValidator : AbstractValidator<PatchTaskRequest>
     {
         public UpdateTaskRequestValidator()
         {
@@ -22,13 +22,9 @@ namespace TodoApp.Api.Model.TodoTasks.Validators
                 .GreaterThan(DateTimeOffset.UtcNow).WithMessage("Complition date must not be in the past!")
                 .When(x => x.DueDate != null);
 
-            RuleFor(x => x.Status)
-                .IsInEnum().WithMessage("Incorrect type of status!")
-                .When(x => x.Status != null); ;
-
             RuleFor(x => x.Priority)
                 .IsInEnum().WithMessage("Incorrect type of priority!")
-                .When(x => x.Priority != null); ;
+                .When(x => x.Priority != null);
         }
     }
 }
