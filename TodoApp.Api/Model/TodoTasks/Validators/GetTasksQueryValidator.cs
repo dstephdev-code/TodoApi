@@ -8,38 +8,45 @@ namespace TodoApp.Api.Model.TodoTasks.Validators
         public GetTasksQueryValidator()
         {
             RuleFor(x => x.SearchTerm)
-                .Length(1, 256).WithMessage("Search term length should be between 1 and 256 symbols")
+                .Length(1, 256).WithMessage("Search term length must be between 1 and 256 characters.")
                 .When(x => x.SearchTerm != null);
 
             RuleFor(x => x.CreatedAfter)
-                .NotEmpty().WithMessage("If you pass 'created after' property dont leave it empty")
-                .LessThan(DateTimeOffset.UtcNow).WithMessage("There is no tasks created in future")
+                .LessThan(DateTimeOffset.UtcNow).WithMessage("Created after date cannot be in the future.")
+                .When(x => x.CreatedAfter != null);
+            RuleFor(x => x.CreatedBefore)
+                .LessThan(DateTimeOffset.UtcNow).WithMessage("Created before date cannot be in the future.")
                 .When(x => x.CreatedAfter != null);
 
-            RuleFor(x => x.CreatedBefore)
-                .NotEmpty().WithMessage("If you pass 'created before' property dont leave it empty")
-                .When(x => x.CreatedBefore != null);
-
-            RuleFor(x => x.CompletionDateBefore)
-                .NotEmpty().WithMessage("If you pass 'completion date before' property dont leave it empty")
-                .When(x => x.CompletionDateBefore != null);
+            RuleFor(x => x)
+                .Must(x =>
+                    !x.CreatedAfter.HasValue ||
+                    !x.CreatedBefore.HasValue ||
+                    x.CreatedAfter <= x.CreatedBefore)
+                .WithMessage("'CreatedAfter' must be earlier than 'CreatedBefore'.");
+            RuleFor(x => x)
+                .Must(x =>
+                    !x.DueAfter.HasValue ||
+                    !x.DueBefore.HasValue ||
+                    x.DueAfter <= x.DueBefore)
+                .WithMessage("'DueAfter' must be earlier than 'DueBefore'.");
 
             RuleFor(x => x.Status)
-                .IsInEnum().WithMessage("Incorrect type of status!")
-                .When(x => x.Status != null); 
-
+                .IsInEnum().WithMessage("Invalid status value."); 
             RuleFor(x => x.Priority)
-                .IsInEnum().WithMessage("Incorrect type of priority!")
-                .When(x => x.Priority != null);
+                .IsInEnum().WithMessage("Invalid priority value.");
+
+            RuleFor(x => x.SortBy)
+                .IsInEnum().WithMessage("Invalid sorting field.");
 
             RuleFor(x => x.PageSize)
-                .NotEmpty().WithMessage("If you pass 'page size' property dont leave it empty")
-                .GreaterThan(0).WithMessage("Page size must be greater than 0")
-                .LessThanOrEqualTo(100).WithMessage("Page size must be lesser than 101");
+                .NotEmpty().WithMessage("Dont leave page size empty.")
+                .GreaterThan(0).WithMessage("Page size must be greater than zero.")
+                .LessThanOrEqualTo(100).WithMessage("Page size must be lesser than hundred.");
 
             RuleFor(x => x.PageNumber)
-                .NotEmpty().WithMessage("If you pass 'page number' property dont leave it empty")
-                .GreaterThan(0).WithMessage("Page number must be greater than 0");
+                .NotEmpty().WithMessage("Dont leave page number empty.")
+                .GreaterThan(0).WithMessage("Page number must be greater than zero.");
         }
     }
 }

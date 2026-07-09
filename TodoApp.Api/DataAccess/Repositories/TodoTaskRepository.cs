@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TodoApp.Api.Model.Enums;
 using TodoApp.Api.Model.TodoTasks;
 using TodoApp.Api.Model.TodoTasks.Dto;
 
@@ -10,7 +11,9 @@ namespace TodoApp.Api.DataAccess.Repositories
 
         public async Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Tasks.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            return await _dbContext.Tasks
+                .Include(t => t.TaskAssignments)
+                .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
         }
 
         public async Task<List<TodoTask>> GetAllAsync(GetTasksQuery query, CancellationToken cancellationToken = default)
@@ -35,9 +38,13 @@ namespace TodoApp.Api.DataAccess.Repositories
                 queryable = queryable.Where(t => t.CreatedAt < query.CreatedBefore.Value);
             }
 
-            if (query.CompletionDateBefore.HasValue)
+            if (query.DueAfter.HasValue)
             {
-                queryable = queryable.Where(t => t.DueDate < query.CompletionDateBefore.Value);
+                queryable = queryable.Where(t => t.DueDate > query.DueAfter.Value);
+            }
+            if (query.DueBefore.HasValue)
+            {
+                queryable = queryable.Where(t => t.DueDate < query.DueBefore.Value);
             }
 
             if (query.Status.HasValue)
@@ -50,14 +57,14 @@ namespace TodoApp.Api.DataAccess.Repositories
                 queryable = queryable.Where(t => t.Priority == query.Priority.Value);
             }
 
-            queryable = query.SortBy?.ToLower() switch
+            queryable = query.SortBy switch
             {
-                "date" => query.IsDescending ? queryable.OrderByDescending(t => t.CreatedAt) : queryable.OrderBy(t => t.CreatedAt),
-                "duedate" => query.IsDescending ? queryable.OrderByDescending(t => t.DueDate) : queryable.OrderBy(t => t.DueDate),
-                "status" => query.IsDescending
+                TaskSortField.CreatedAt => query.IsDescending ? queryable.OrderByDescending(t => t.CreatedAt) : queryable.OrderBy(t => t.CreatedAt),
+                TaskSortField.DueDate => query.IsDescending ? queryable.OrderByDescending(t => t.DueDate) : queryable.OrderBy(t => t.DueDate),
+                TaskSortField.Status => query.IsDescending
                     ? queryable.OrderByDescending(t => t.Status == Model.Enums.TaskStatusEnum.Canceled ? 3 : t.Status == Model.Enums.TaskStatusEnum.Completed ? 2 : t.Status == Model.Enums.TaskStatusEnum.InProgress ? 1 : 0)
                     : queryable.OrderBy(t => t.Status == Model.Enums.TaskStatusEnum.Canceled ? 3 : t.Status == Model.Enums.TaskStatusEnum.Completed ? 2 : t.Status == Model.Enums.TaskStatusEnum.InProgress ? 1 : 0),
-                "priority" => query.IsDescending 
+                TaskSortField.Priority => query.IsDescending 
                     ? queryable.OrderByDescending(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0) 
                     : queryable.OrderBy(t => t.Priority == Model.Enums.TaskPriorityEnum.High ? 2 : t.Priority == Model.Enums.TaskPriorityEnum.Medium ? 1 : 0),
                 _ => queryable.OrderBy(t => t.Name)
