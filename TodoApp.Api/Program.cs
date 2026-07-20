@@ -41,6 +41,8 @@ namespace TodoApp.Api
                 builder.Services.AddScoped<ITodoTasksService, TodoTasksService>();
                 builder.Services.AddScoped<IUserRepository, UserRepository>();
                 builder.Services.AddScoped<IUserService, UserService>();
+                builder.Services.AddScoped<ITaskAssignmentRepository, TaskAssignmentRepository>();
+                builder.Services.AddScoped<ITaskAssignmentService, TaskAssignmentService>();
 
                 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
